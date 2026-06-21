@@ -1,18 +1,26 @@
 @model SurveyApp.Models.Survey
 
-<h2>Ankieta: @Model.Title</h2>
-<p>@Model.Description</p>
+<h2>Rozwiązujesz: @Model.Title</h2>
+<p><i>@Model.Description</i></p>
 <hr />
 
 <form action="/Survey/SubmitVote" method="POST">
-    
-    @foreach (var odpowiedz in Model.Options)
+    <input type="hidden" name="ankietaId" value="@Model.Id" />
+
+    @foreach (var pytanie in Model.Questions)
     {
-        <input type="radio" name="optionId" value="@odpowiedz.Id" required /> 
-        @odpowiedz.Text <br /><br />
+        <div class="mb-4 p-3 bg-light border">
+            <h4>@pytanie.Text</h4>
+            <hr />
+            
+            @foreach (var opcja in pytanie.Options)
+            {
+                <input type="radio" name="pytanie_@pytanie.Id" value="@opcja.Id" required /> 
+                <label>@opcja.Text</label> <br />
+            }
+        </div>
     }
     
-    <button type="submit" class="btn btn-success">Wyslij swoj glos</button>
-    <br /><br />
-    <a href="/Survey/Index">Wroc do listy (bez glosowania)</a>
+    <button type="submit" class="btn btn-success btn-lg">Zatwierdź całą ankietę</button>
+    <a href="/Survey/Index" class="btn btn-danger btn-lg">Zrezygnuj</a>
 </form>

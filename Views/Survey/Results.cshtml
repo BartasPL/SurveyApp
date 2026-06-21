@@ -1,48 +1,48 @@
 @model SurveyApp.Models.Survey
 
-<h2>Wyniki ankiety: @Model.Title</h2>
+<h2>Raport wyników: @Model.Title</h2>
 <br />
 
-<canvas id="mojWykres" width="400" height="200"></canvas>
+@foreach (var pytanie in Model.Questions)
+{
+    <div class="mb-5 border p-3">
+        <h4>Pytanie: @pytanie.Text</h4>
+        
+        <canvas id="wykres_@pytanie.Id" width="400" height="150"></canvas>
+    </div>
+}
 
-<br /><br />
-<a href="/Survey/Index" class="btn btn-secondary">Powrot</a>
+<a href="/Survey/Index" class="btn btn-secondary">Powrot do listy ankiet</a>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    console.log("Zaczynam rysowac wykres");
-
-    var nazwyOpcji = [];
-    var licznikGlosow = [];
-
-    @foreach (var op in Model.Options)
+    @foreach (var pytanie in Model.Questions)
     {
         <text>
-        // Html.Raw naprawia polskie znaki
-        nazwyOpcji.push('@Html.Raw(op.Text)'); 
-        licznikGlosow.push(@op.Votes.Count);
+            var etykiety_@pytanie.Id = [];
+            var glosy_@pytanie.Id = [];
+
+            @foreach (var op in pytanie.Options)
+            {
+                @:etykiety_@pytanie.Id .push('@Html.Raw(op.Text)');
+                @:glosy_@pytanie.Id .push(@op.Votes.Count);
+            }
+
+            var plotno_@pytanie.Id = document.getElementById('wykres_@pytanie.Id');
+            
+            new Chart(plotno_@pytanie.Id, {
+                type: 'bar',
+                data: {
+                    labels: etykiety_@pytanie.Id,
+                    datasets: [{
+                        label: 'Liczba głosów',
+                        data: glosy_@pytanie.Id,
+                        backgroundColor: 'green'
+                    }]
+                },
+                options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
         </text>
     }
-
-    var plotno = document.getElementById('mojWykres');
-    
-    var rysowanyWykres = new Chart(plotno, {
-        type: 'bar',
-        data: {
-            labels: nazwyOpcji,
-            datasets: [{
-                label: 'Liczba oddanych glosow',
-                data: licznikGlosow,
-                backgroundColor: 'blue',
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
-        }
-    });
 </script>

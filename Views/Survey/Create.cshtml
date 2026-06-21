@@ -1,49 +1,66 @@
 @model SurveyApp.Models.Survey
 
-<h2>Dodaj nowa ankiete do systemu</h2>
-<br />
+<h2>Stwórz rozbudowaną ankietę</h2>
+<hr />
 
 <form action="/Survey/Create" method="POST">
-    <b>Tytuł ankiety:</b> <br />
-    <input type="text" name="title" class="form-control" required />
-    <br />
+    <input type="hidden" name="iloscPytanUkryta" id="iloscPytanWartosc" value="1" />
 
-    <b>Opis:</b> <br />
-    <textarea name="description" class="form-control"></textarea>
-    <br />
+    <b>Tytuł ankiety:</b> <br />
+    <input type="text" name="title" class="form-control mb-2" required />
     
-    <b>Odpowiedzi:</b>
-    <div id="polaNaOpcje">
-        Opcja 1: <input type="text" name="options" class="form-control" /><br />
-        Opcja 2: <input type="text" name="options" class="form-control" /><br />
+    <b>Opis:</b> <br />
+    <textarea name="description" class="form-control mb-4"></textarea>
+    
+    <div id="kontenerNaPytania">
+        <div class="card p-3 mb-3 border-primary" id="pytanieDiv_1">
+            <h4>Pytanie 1:</h4>
+            <input type="text" name="pytanie_1" class="form-control mb-2" placeholder="Wpisz treść pytania" required />
+            
+            <b>Opcje do wyboru:</b>
+            <div id="opcjeDlaPytania_1">
+                <input type="text" name="opcje_1" class="form-control mb-1" placeholder="Opcja 1" required />
+                <input type="text" name="opcje_1" class="form-control mb-1" placeholder="Opcja 2" required />
+            </div>
+            
+            <button type="button" class="btn btn-sm btn-info mt-2" onclick="dodajOpcje(1)">+ Dodaj opcję do tego pytania</button>
+        </div>
     </div>
     
-    <button type="button" onclick="dodajNowePole()">+ Dodaj wiecej odpowiedzi</button>
-    <br /><br />
-    <hr />
+    <button type="button" class="btn btn-warning" onclick="dodajKolejnePytanie()">+ Dodaj NASTĘPNE PYTANIE</button>
+    <br /><br /><hr />
     
-    <button type="submit" class="btn btn-primary">Zapisz ankiete</button>
-    <a href="/Survey/Index">Anuluj i wroc</a>
+    <button type="submit" class="btn btn-success btn-lg">Zapisz całą ankietę</button>
+    <a href="/Survey/Index" class="btn btn-secondary btn-lg">Anuluj</a>
 </form>
 
 <script>
-    var ileOpcjiJest = 2;
-    
-    function dodajNowePole() {
-        ileOpcjiJest = ileOpcjiJest + 1;
-        
-        var kontener = document.getElementById("polaNaOpcje");
+    var licznikPytan = 1;
 
-        var nowyInput = document.createElement("input");
-        nowyInput.type = "text";
-        nowyInput.name = "options";
-        nowyInput.className = "form-control";
+    function dodajOpcje(numerPytania) {
+        var kontener = document.getElementById("opcjeDlaPytania_" + numerPytania);
+        var nowyInput = '<input type="text" name="opcje_' + numerPytania + '" class="form-control mb-1" placeholder="Kolejna opcja" required />';
+        kontener.insertAdjacentHTML('beforeend', nowyInput);
+    }
 
-        var tekst = document.createTextNode("Opcja " + ileOpcjiJest + ": ");
-        var nowaLinia = document.createElement("br");
+    function dodajKolejnePytanie() {
+        licznikPytan++;
+        document.getElementById("iloscPytanWartosc").value = licznikPytan;
 
-        kontener.appendChild(tekst);
-        kontener.appendChild(nowyInput);
-        kontener.appendChild(nowaLinia);
+        var htmlPytania = `
+        <div class="card p-3 mb-3 border-primary" id="pytanieDiv_${licznikPytan}">
+            <h4>Pytanie ${licznikPytan}:</h4>
+            <input type="text" name="pytanie_${licznikPytan}" class="form-control mb-2" placeholder="Wpisz treść pytania" required />
+            
+            <b>Opcje do wyboru:</b>
+            <div id="opcjeDlaPytania_${licznikPytan}">
+                <input type="text" name="opcje_${licznikPytan}" class="form-control mb-1" placeholder="Opcja 1" required />
+                <input type="text" name="opcje_${licznikPytan}" class="form-control mb-1" placeholder="Opcja 2" required />
+            </div>
+            
+            <button type="button" class="btn btn-sm btn-info mt-2" onclick="dodajOpcje(${licznikPytan})">+ Dodaj opcję do tego pytania</button>
+        </div>`;
+
+        document.getElementById("kontenerNaPytania").insertAdjacentHTML('beforeend', htmlPytania);
     }
 </script>
