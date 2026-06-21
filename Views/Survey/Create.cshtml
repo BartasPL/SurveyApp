@@ -1,0 +1,49 @@
+@model SurveyApp.Models.Survey
+
+<h2>Dodaj nowa ankiete do systemu</h2>
+<br />
+
+<form action="/Survey/Create" method="POST">
+    <b>Tytuł ankiety:</b> <br />
+    <input type="text" name="title" class="form-control" required />
+    <br />
+
+    <b>Opis:</b> <br />
+    <textarea name="description" class="form-control"></textarea>
+    <br />
+    
+    <b>Odpowiedzi:</b>
+    <div id="polaNaOpcje">
+        Opcja 1: <input type="text" name="options" class="form-control" /><br />
+        Opcja 2: <input type="text" name="options" class="form-control" /><br />
+    </div>
+    
+    <button type="button" onclick="dodajNowePole()">+ Dodaj wiecej odpowiedzi</button>
+    <br /><br />
+    <hr />
+    
+    <button type="submit" class="btn btn-primary">Zapisz ankiete</button>
+    <a href="/Survey/Index">Anuluj i wroc</a>
+</form>
+
+<script>
+    var ileOpcjiJest = 2;
+    
+    function dodajNowePole() {
+        ileOpcjiJest = ileOpcjiJest + 1;
+        
+        var kontener = document.getElementById("polaNaOpcje");
+
+        var nowyInput = document.createElement("input");
+        nowyInput.type = "text";
+        nowyInput.name = "options";
+        nowyInput.className = "form-control";
+
+        var tekst = document.createTextNode("Opcja " + ileOpcjiJest + ": ");
+        var nowaLinia = document.createElement("br");
+
+        kontener.appendChild(tekst);
+        kontener.appendChild(nowyInput);
+        kontener.appendChild(nowaLinia);
+    }
+</script>

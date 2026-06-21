@@ -1,0 +1,48 @@
+@model SurveyApp.Models.Survey
+
+<h2>Wyniki ankiety: @Model.Title</h2>
+<br />
+
+<canvas id="mojWykres" width="400" height="200"></canvas>
+
+<br /><br />
+<a href="/Survey/Index" class="btn btn-secondary">Powrot</a>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    console.log("Zaczynam rysowac wykres");
+
+    var nazwyOpcji = [];
+    var licznikGlosow = [];
+
+    @foreach (var op in Model.Options)
+    {
+        <text>
+        // Html.Raw naprawia polskie znaki
+        nazwyOpcji.push('@Html.Raw(op.Text)'); 
+        licznikGlosow.push(@op.Votes.Count);
+        </text>
+    }
+
+    var plotno = document.getElementById('mojWykres');
+    
+    var rysowanyWykres = new Chart(plotno, {
+        type: 'bar',
+        data: {
+            labels: nazwyOpcji,
+            datasets: [{
+                label: 'Liczba oddanych glosow',
+                data: licznikGlosow,
+                backgroundColor: 'blue',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>

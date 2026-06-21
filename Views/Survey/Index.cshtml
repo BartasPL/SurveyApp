@@ -1,0 +1,33 @@
+@model List<SurveyApp.Models.Survey>
+
+<h2>Lista wszystkich ankiet</h2>
+<hr />
+
+@if (User.IsInRole("Ankieter"))
+{
+    <a href="/Survey/Create" class="btn btn-primary">Dodaj nową ankietę</a>
+    <br /><br />
+}
+
+<table class="table" border="1">
+    <thead>
+        <tr>
+            <th>Tytul</th>
+            <th>Opis</th>
+            <th>Co mozna zrobic</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ankieta in Model)
+        {
+            <tr>
+                <td>@ankieta.Title</td>
+                <td>@ankieta.Description</td>
+                <td>
+                    <a href="/Survey/Vote/@ankieta.Id" class="btn btn-success">Zaglsuj</a>
+                    <a href="/Survey/Results/@ankieta.Id" class="btn btn-info">Pokaz wyniki</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

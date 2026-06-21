@@ -1,0 +1,18 @@
+@model SurveyApp.Models.Survey
+
+<h2>Ankieta: @Model.Title</h2>
+<p>@Model.Description</p>
+<hr />
+
+<form action="/Survey/SubmitVote" method="POST">
+    
+    @foreach (var odpowiedz in Model.Options)
+    {
+        <input type="radio" name="optionId" value="@odpowiedz.Id" required /> 
+        @odpowiedz.Text <br /><br />
+    }
+    
+    <button type="submit" class="btn btn-success">Wyslij swoj glos</button>
+    <br /><br />
+    <a href="/Survey/Index">Wroc do listy (bez glosowania)</a>
+</form>
