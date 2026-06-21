@@ -34,3 +34,14 @@ Domyślnie, nowo zarejestrowany użytkownik nie posiada uprawnień do tworzenia 
 
 ### Jak testować głosowanie?
 Po utworzeniu ankiety, polecam wylogować się i założyć drugie, osobne konto (lub otworzyć aplikację w trybie Incognito). Pozwoli to przetestować system głosowania z perspektywy zwykłego Respondenta oraz sprawdzić blokadę przed ponownym oddaniem głosu (system przekierowuje wtedy prosto do wykresu).
+
+
+### Utworzone konta na potrzeby testów
+
+KONTO ANKIETERA
+Email: test@test.pl
+Hasło: Test1234!
+
+KONTO ZWYKŁE
+Email: test2@test.pl
+Hasło: Test1234!
